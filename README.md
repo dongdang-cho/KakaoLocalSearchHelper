@@ -3,7 +3,17 @@ Gson 라이브러리를 활용하여, 카카오 로컬 검색 API를 사용할 �
 카카오 로컬 서치 URL : https://developers.kakao.com/docs/restapi/local 
     
 ### 1. 카테고리로 장소 검색 
-   
+- API 요청 시 필요 파라미터 값(LocalCategoryRequestDTO로 대응됨)  
+<img width="400" src = "https://user-images.githubusercontent.com/60133320/73011921-99681200-3e58-11ea-8481-ce8f46eb86b0.png"/>  
+
+- API 응답 시 받는 JSON 객체
+LocalCategoryResponseDTO : 응답 받는 종합 객체
+  - LocalCategoryMetaDTO: 응답받은 문서의 메타 정보가 담김
+     - LocalCategoryMetaSameNameDTO : 질의어에 인식한 결과값과 비슷한 정보들이 담김
+  - LocalCategoryDocumentDTO : 장소의 정보들이 담김  
+  
+<img width="400" src = "https://user-images.githubusercontent.com/60133320/73012406-9e799100-3e59-11ea-9c82-4d01b27926a8.png"/>
+
 ### 2. 키워드로 장소 검색
 - API 요청 시 필요 파라미터 값(LocalKeywordRequestDTO로 대응됨)
 <img width="400" src = "https://user-images.githubusercontent.com/60133320/72920289-56d90380-3d8c-11ea-8800-34fe5c70f6c5.png"/>
@@ -75,11 +85,28 @@ ZIP 파일을 다운 받아, 이클립스에 프로젝트를 import 하거나, c
 # 사용 예제
 
 ### 1. 카테고리로 장소 검색 
+MainApp.java의 main 메소드가 시작점이 된다.  
+1) LocalCategoryRequestDTO에 값을 저장하여 api 요청을 준비한다.  
+2) CategoryLocalSearch..sendCategoryQuery 메소드로 api 요청하고, LocalCategoryResponseDTO를 반환 받는다.  
+
+<pre>
+<code>
+	//카테고리 로컬 서치
+	CategoryLocalSearch categoryLocalSearch = new CategoryLocalSearch();
+	LocalCategoryRequestDTO requestDTO = new LocalCategoryRequestDTO();
+	requestDTO.setCategory_group_code("음식점");//그룹코드 참조
+	LocalCategoryResponseDTO categoryResponseDTO = categoryLocalSearch.sendCategoryQuery(requestDTO);
+	System.out.println(categoryResponseDTO.getMeta());
+	for(LocalCategoryDocumentDTO dto : categoryResponseDTO.getDocuments()) {
+		System.out.println(dto);
+	}
+</code>
+</pre>
 
 ### 2. 키워드로 장소 검색
 MainApp.java의 main 메소드가 시작점이 된다.  
-1) LocalKeywordRequestDTO의 값을 저장하여 api 요청을 준비한다.
-2) KewordLocalSearch의 sendKewordQuery 메소드로 api 요청하고 LocalKeywordResponseDTO 반환 받는다.
+1) LocalKeywordRequestDTO에 값을 저장하여 api 요청을 준비한다.
+2) KewordLocalSearch의 sendKewordQuery 메소드로 api 요청하고, LocalKeywordResponseDTO를 반환 받는다.
 
 <pre>
  <code>
